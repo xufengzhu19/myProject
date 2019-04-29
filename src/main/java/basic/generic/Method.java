@@ -6,7 +6,7 @@ import java.util.Collections;
 /**
  * 泛型方法，在声明方法时定义一个或多个类型形参
  */
-public class method<E>{
+public class Method<E>{
 //    Collections.copy()
 //     public static <T> void copy(List<? super T> dest, List<? extends T> src)
 

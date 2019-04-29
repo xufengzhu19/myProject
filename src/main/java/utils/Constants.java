@@ -5,7 +5,11 @@ package utils;
  */
 
 public class Constants {
-    public static String RedisHost="";
-    public static int RedisPort=6379;
+    public static final String RedisHost="";
+    public static final int RedisPort=6379;
+
+    public static final String CodeStr="";
+    public static final String Token="";
+    public static final String URL="";
 
 }
