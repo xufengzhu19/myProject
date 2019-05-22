@@ -33,6 +33,9 @@ public class lock {
         rLock.lock();
         i++;
         rLock.unlock();
+        if (rLock.tryLock()){
+            System.out.println("我获得了锁！");
+        }
     }
 
 }

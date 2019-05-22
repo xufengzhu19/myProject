@@ -1,19 +1,19 @@
-import utils.DateBuilder;
-import utils.NumberUtils;
+import com.hankcs.hanlp.corpus.io.ByteArray;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 public class mytest {
 
     public static void main(String[] args) {
-        LocalDateTime targetHour = LocalDateTime.now().minusHours(17);
-        LocalDate targetDate = targetHour.toLocalDate();
-        String targetDateStr = targetDate.format(DateTimeFormatter.BASIC_ISO_DATE);
-        System.out.println(targetDateStr);
+        test();
+    }
+    public static void test(LocalDateTime... dateTimes){
+        System.out.println(ObjectUtils.allNotNull(dateTimes));
+
     }
 }
