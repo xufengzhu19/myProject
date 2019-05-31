@@ -6,12 +6,12 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class cas {
+public class CAS {
     //atomic包下AtomicStampedReference类提供compareAndSet解决ABA问题
     private AtomicInteger atomicInteger=new AtomicInteger();
     private int i=0;
     public static void main(String[] args) {
-        final cas cas=new cas();
+        final CAS cas=new CAS();
         List<Thread> list=new ArrayList<>();
         long start=System.currentTimeMillis();
         for (int j=0;j<100;j++){

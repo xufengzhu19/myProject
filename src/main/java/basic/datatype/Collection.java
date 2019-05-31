@@ -4,9 +4,9 @@ import entity.Student;
 
 import java.util.*;
 
-public class collection {
+public class Collection {
     public static void main(String[] args) {
-        Collection myHashSet = new HashSet();
+        java.util.Collection myHashSet = new HashSet();
 
 //        myHashSet.add(null);
 //        System.out.println(myHashSet.size());//1

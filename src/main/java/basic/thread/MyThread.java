@@ -11,7 +11,7 @@ import java.util.concurrent.locks.Lock;
  * 线程创建的几种方式
  */
 
-public class thread {
+public class MyThread {
     public static void main(String[] args) {
         FutureTask<Integer> task = new FutureTask<Integer>((Callable<Integer>) () -> {
             int i = 0;
@@ -24,11 +24,11 @@ public class thread {
             System.out.println(Thread.currentThread().getName() + "#" + i);
             if (i == 10) {
 //                1.继承Thread类
-                new thread1().start();//Thread-0#183
-                new thread1().start();//Thread-1#183
+                new Thread1().start();//Thread-0#183
+                new Thread1().start();//Thread-1#183
 
 //                2.实现接口
-                thread2 t = new thread2();
+                Thread2 t = new Thread2();
                 new Thread(t, "new1").start();//new1#0
                 new Thread(t, "new2").start();//new2#0
 
@@ -60,7 +60,7 @@ public class thread {
     }
 }
 
-class thread1 extends Thread {
+class Thread1 extends Thread {
     private int i;
 
     @Override
@@ -70,7 +70,7 @@ class thread1 extends Thread {
     }
 }
 
-class thread2 implements Runnable {
+class Thread2 implements Runnable {
     private int i;
 
     @Override
@@ -83,10 +83,10 @@ class thread2 implements Runnable {
 /**
  * 线程通讯-join测试线程
  */
-class threadJoin implements Runnable {
+class ThreadJoin implements Runnable {
     private Thread thread;
 
-    public threadJoin(Thread thread) {
+    public ThreadJoin(Thread thread) {
         this.thread = thread;
     }
 
@@ -137,11 +137,11 @@ class threadWait implements Runnable {
     }
 }
 
-class threadNotify implements Runnable {
+class ThreadNotify implements Runnable {
     private List<Integer> list;
     private int maxLength;
 
-    public threadNotify(List list, int maxLength) {
+    public ThreadNotify(List list, int maxLength) {
         this.list = list;
         this.maxLength = maxLength;
     }
@@ -177,11 +177,11 @@ class threadNotify implements Runnable {
     }
 }
 
-class threadAwait implements Runnable {
+class ThreadAwait implements Runnable {
     private List<Integer> list;
     private Lock lock;
 
-    public threadAwait(List list, Lock lock) {
+    public ThreadAwait(List list, Lock lock) {
         this.list = list;
         this.lock = lock;
     }
@@ -208,12 +208,12 @@ class threadAwait implements Runnable {
     }
 }
 
-class threadSignal implements Runnable {
+class ThreadSignal implements Runnable {
     private List<Integer> list;
     private int maxLength;
     private Lock lock;
 
-    public threadSignal(List list, int maxLength, Lock lock) {
+    public ThreadSignal(List list, int maxLength, Lock lock) {
         this.list = list;
         this.maxLength = maxLength;
         this.lock = lock;
@@ -243,9 +243,9 @@ class threadSignal implements Runnable {
     }
 }
 
-class threadBQP implements Runnable{
+class ThreadBQP implements Runnable{
     private BlockingQueue queue;
-    public threadBQP(BlockingQueue queue) {
+    public ThreadBQP(BlockingQueue queue) {
         this.queue = queue;
     }
     @Override
@@ -262,9 +262,9 @@ class threadBQP implements Runnable{
         }
     }
 }
-class threadBQC implements Runnable{
+class ThreadBQC implements Runnable{
     private BlockingQueue queue;
-    public threadBQC(BlockingQueue queue) {
+    public ThreadBQC(BlockingQueue queue) {
         this.queue = queue;
     }
     @Override

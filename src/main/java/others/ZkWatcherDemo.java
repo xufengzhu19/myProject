@@ -1,8 +1,6 @@
 package others;
 
-import com.hankcs.hanlp.classification.utilities.io.ILogger;
 import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
 import org.apache.zookeeper.*;
 import org.apache.zookeeper.data.Stat;
 import utils.Constants;
@@ -10,8 +8,8 @@ import utils.Constants;
 import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
 
-public class zkWatcher implements Watcher {
-    private Logger logger=Logger.getLogger(zkWatcher.class);
+public class ZkWatcherDemo implements Watcher {
+    private Logger logger=Logger.getLogger(ZkWatcherDemo.class);
 //    static {
 //        PropertyConfigurator.configure("log4j.properties");
 //    }

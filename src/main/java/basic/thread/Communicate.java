@@ -7,7 +7,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-public class communicate {
+public class Communicate {
     public static void main(String[] args) throws InterruptedException {
 //        join();
         pc();
@@ -17,7 +17,7 @@ public class communicate {
         Thread pre = Thread.currentThread();
         for (int i = 0; i < 10; i++) {
             //每个线程拥有前一个的引用，需要等到前一个终止，才能从等待中返回
-            Thread thread = new Thread(new threadJoin(pre), String.valueOf(i));
+            Thread thread = new Thread(new ThreadJoin(pre), String.valueOf(i));
             thread.start();
             pre = thread;
         }
@@ -56,7 +56,7 @@ public class communicate {
         LinkedList linkedList = new LinkedList();
         ExecutorService service = Executors.newFixedThreadPool(15);
         for (int i = 0; i < 5; i++) {
-            service.submit(new threadNotify(linkedList, 5));
+            service.submit(new ThreadNotify(linkedList, 5));
         }
         for (int i = 0; i < 10; i++) {
             service.submit(new threadWait(linkedList));
@@ -72,10 +72,10 @@ public class communicate {
         LinkedList linkedList = new LinkedList();
         ExecutorService service = Executors.newFixedThreadPool(15);
         for (int i = 0; i < 5; i++) {
-            service.submit(new threadSignal(linkedList, 5, Constants.REENTRANT_LOCK));
+            service.submit(new ThreadSignal(linkedList, 5, Constants.REENTRANT_LOCK));
         }
         for (int i = 0; i < 5; i++) {
-            service.submit(new threadAwait(linkedList, Constants.REENTRANT_LOCK));
+            service.submit(new ThreadAwait(linkedList, Constants.REENTRANT_LOCK));
         }
 
     }
@@ -86,10 +86,10 @@ public class communicate {
     public static void bq(){
         ExecutorService service = Executors.newFixedThreadPool(15);
         for (int i = 0; i < 5; i++) {
-            service.submit(new threadBQP(Constants.BQueue));
+            service.submit(new ThreadBQP(Constants.BQueue));
         }
         for (int i = 0; i < 10; i++) {
-            service.submit(new threadBQC(Constants.BQueue));
+            service.submit(new ThreadBQC(Constants.BQueue));
         }
     }
 }

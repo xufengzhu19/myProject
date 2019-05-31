@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class myfile {
+public class MyFile {
     public static void main(String[] args) throws IOException {
 //        String content="您叫什么," +
 //                "你叫什么," +

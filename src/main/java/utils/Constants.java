@@ -30,5 +30,10 @@ public class Constants {
 
     public static final String ZK_URL = IP+":22181";
 
+    public static final String Kafka_Brokers = IP+":29092";
+    public static final String Kafka_Topic = "test";
+    public static final String Kafka_Group_ID = "group.demo";
+
+
 
 }

@@ -7,7 +7,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.*;
 
-public class proxy {
+public class Proxy {
     public static void main(String[] args) {
         try {
             checkProxy("14.155.115.146",9000);
@@ -25,7 +25,7 @@ public class proxy {
         }
         InetSocketAddress addr = null;
         addr = new InetSocketAddress(ip, port);
-        Proxy proxy = new Proxy(Proxy.Type.HTTP, addr); // http proxy
+        java.net.Proxy proxy = new java.net.Proxy(java.net.Proxy.Type.HTTP, addr); // http proxy
         InputStream in = null;
         try {
             URLConnection conn = url.openConnection(proxy);

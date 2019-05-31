@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * 静态分派-方法重载，动态分派-方法重写
  */
-public class base {
+public class Base {
 
 //    public static void sayHello(char arg) {
 //        System.out.println("hello char");

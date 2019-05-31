@@ -1,6 +1,6 @@
 package basic.datatype;
 
-public class arry {
+public class Arry {
     public static void main(String[] args) {
 //    int[]是一种数据结构，定义数组时不能指定长度
 //    数组类型是虚拟机直接分配的

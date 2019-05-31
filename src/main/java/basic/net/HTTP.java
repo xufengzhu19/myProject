@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.IntStream;
 
-public class http {
+public class HTTP {
     public static void main(String[] args) {
         LocalDate targetDate = LocalDate.of(2019, 4, 27);
         LocalDate today = targetDate.plusDays(1);

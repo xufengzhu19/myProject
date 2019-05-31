@@ -5,7 +5,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import static utils.Constants.LOCK;
 
-public class lock {
+public class MyLock {
     public static void main(String[] args) {
         syncBlock();
         try {

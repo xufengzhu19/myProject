@@ -4,7 +4,7 @@ import redis.clients.jedis.Jedis;
 
 import static utils.Constants.*;
 
-public class redis {
+public class RedisDemo {
     public static void main(String[] args) {
         Jedis jedis = new Jedis(RedisHost, RedisPort);
         jedis.auth(RedisPwd);

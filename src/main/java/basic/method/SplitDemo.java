@@ -5,5 +5,5 @@ package basic.method;
  * 大数据量情况，避免使用String.split()
  * 6/7/8方法源码对比
  */
-public class splitdemo {
+public class SplitDemo {
 }

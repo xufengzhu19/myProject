@@ -3,7 +3,7 @@ package basic.thread;
 /**
  * 死锁，A B 线程都阻塞，互相需要
  */
-public class deadlock {
+public class DeadLock {
     public static void main(String[] args) {
         Thread t1=new Thread(new Runnable() {
             @Override
