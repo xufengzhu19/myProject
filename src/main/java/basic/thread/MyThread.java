@@ -193,12 +193,12 @@ class ThreadAwait implements Runnable {
             try {
                 while (list.isEmpty()) {
                     System.out.println("消费者" + Thread.currentThread().getName() + "  list为空，进行wait");
-                    Constants.notEmpty.await();
+                    Constants.Reent_Not_Empty_Lock.await();
                     System.out.println("消费者" + Thread.currentThread().getName() + "  退出wait");
                 }
                 Integer element = list.remove(0);
                 System.out.println("消费者" + Thread.currentThread().getName() + "  消费数据：" + element);
-                Constants.notFull.signal();
+                Constants.Reent_Not_Full_Lock.signal();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } finally {
@@ -226,14 +226,14 @@ class ThreadSignal implements Runnable {
             try {
                 while (list.size() == maxLength) {
                     System.out.println("生产者" + Thread.currentThread().getName() + "  list以达到最大容量，进行wait");
-                    Constants.notFull.await();
+                    Constants.Reent_Not_Full_Lock.await();
                     System.out.println("生产者" + Thread.currentThread().getName() + "  退出wait");
                 }
                 Random random = new Random();
                 int i = random.nextInt();
                 System.out.println("生产者" + Thread.currentThread().getName() + " 生产数据" + i);
                 list.add(i);
-                Constants.notEmpty.signal();
+                Constants.Reent_Not_Empty_Lock.signal();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } finally {

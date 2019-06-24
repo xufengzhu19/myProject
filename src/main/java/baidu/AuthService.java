@@ -9,8 +9,8 @@ import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
-import static utils.Constants.API_KEY;
-import static utils.Constants.SECRET_KEY;
+import static utils.Constants.Baidu_API_KEY;
+import static utils.Constants.Baidu_SECRET_KEY;
 
 /**
  * 获取token类
@@ -26,7 +26,7 @@ public class AuthService {
      * }
      */
     public static String getAuth() {
-        return getAuth(API_KEY, SECRET_KEY);
+        return getAuth(Baidu_API_KEY, Baidu_SECRET_KEY);
     }
 
     /**

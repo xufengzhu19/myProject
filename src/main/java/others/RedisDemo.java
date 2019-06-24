@@ -18,8 +18,8 @@ public class RedisDemo {
     }
 
     public static void standalone() {
-        Jedis jedis = new Jedis(RedisHostW, RedisPortW);
-//        jedis.auth(RedisPwd);
+        Jedis jedis = new Jedis(Redis_Host_W, Redis_Port_W);
+//        jedis.auth(Redis_Pwd);
         jedis.connect();
 //    jedis.set("a", "va");
 //jedis.set("b", "vb");
@@ -42,14 +42,14 @@ public class RedisDemo {
         // Could not get a resource from the pool
         poolConfig.setMaxWaitMillis(1000);
         Set<HostAndPort> nodes = new LinkedHashSet<HostAndPort>();
-        nodes.add(new HostAndPort(RedisHostCW0, RedisPortCW0));
-        nodes.add(new HostAndPort(RedisHostCW1, RedisPortCW1));
-        nodes.add(new HostAndPort(RedisHostCW2, RedisPortCW2));
+        nodes.add(new HostAndPort(Redis_Host_Cluster_W0, Redis_Port_Cluster_W0));
+        nodes.add(new HostAndPort(Redis_Host_Cluster_W1, Redis_Port_Cluster_W1));
+        nodes.add(new HostAndPort(Redis_Host_Cluster_W2, Redis_Port_Cluster_W2));
 
-        JedisCluster cluster = new JedisCluster(nodes, 60, 60, 3, RedisPwd_CW, poolConfig);
+        JedisCluster cluster = new JedisCluster(nodes, 60, 60, 3, Redis_Pwd_Cluster_W, poolConfig);
         while (true) {
-            String name = cluster.get("LOCK_SYN_PRODUCT");
-            System.out.println(name);
+//            String name = cluster.get("LOCK_SYN_PRODUCT");
+//            System.out.println(name);
         }
     }
 }

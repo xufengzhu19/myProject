@@ -1,16 +1,16 @@
 import org.apache.commons.lang3.ArrayUtils;
+import utils.Base64;
 
 import java.io.IOException;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 public class mytest {
     public static void main(String[] args) throws IOException {
-        List<Object> linked = new LinkedList<>();
-        linked.add(null);
-        System.out.println(linked.size());
-        System.out.println(Objects.isNull(linked.get(0)));
+
+        BigDecimal count=new BigDecimal(1);
+        BigDecimal totalRecords=new BigDecimal(3);
+        System.out.println(count.divide(totalRecords,3,BigDecimal.ROUND_HALF_UP).doubleValue());
     }
 
     public static void test(String... flag) {

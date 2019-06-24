@@ -18,10 +18,7 @@ import utils.JsonHelper;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 import static utils.Constants.*;
 
@@ -141,7 +138,8 @@ class SimpleCanalClient {
         try {
             connector.connect();
 //            connector.subscribe(".*\\..*");
-            connector.subscribe("canal_tsdb\\.sync_crm_cc_call_log");
+//            connector.subscribe("canal_tsdb\\.sync_crm_cc_call_log");
+            connector.subscribe("canal_tsdb\\.voice_call_info");
 
             connector.rollback();
             int totalEmptyCount = 1200;
@@ -230,43 +228,30 @@ class CanalKafkaProducer {
                     entry.getHeader().getSchemaName(), entry.getHeader().getTableName(), eventType));
 
             StringBuilder rowStr = new StringBuilder();
-            if (eventType == eventType.DELETE) {
-                System.out.println("================delete==================");
-                rowChage.getRowDatasList().forEach(rowData -> {
-                    //                HashMap<String, String> map = new HashMap<>();
-                    rowData.getAfterColumnsList().forEach(column -> {
-                        //                    map.put(column.getName(), column.getValue());
+            rowChage.getRowDatasList().forEach(rowData -> {
+                rowData.getAfterColumnsList().forEach(column -> {
+                    System.out.println(column.getName() + " : " + column.getValue() + "    update=" + column.getUpdated());
+//                    rowStr.append(column.getValue() + ",");
+                    String id = "";
+                    if (column.getName().equals("id")) {
+                        System.out.println("get id");
+                        id = column.getValue();
                         rowStr.append(column.getValue() + ",");
-                        System.out.println(column.getName() + " : " + column.getValue() + "    update=====================================" + column.getUpdated());
-                    });
-                    if (StringUtils.isBlank(rowStr)) {
-                        System.out.println("rowStr is null!");
-                        return;
                     }
-                    list.add(rowStr.deleteCharAt(rowStr.length() - 1).toString());
-                    System.out.println("rowStr=" + rowStr);
-                });
-            } else if (eventType == eventType.INSERT || eventType == eventType.UPDATE) {
-                System.out.println("================insert==================");
-                rowChage.getRowDatasList().forEach(rowData -> {
-                    //                HashMap<String, String> map = new HashMap<>();
-                    rowData.getAfterColumnsList().forEach(column -> {
-                        //                    map.put(column.getName(), column.getValue());
-                        rowStr.append(column.getValue() + ",");
-                        System.out.println(column.getName() + " : " + column.getValue() + "    update=" + column.getUpdated());
-                    });
-                    if (StringUtils.isBlank(rowStr)) {
-                        System.out.println("rowStr is null!");
-                        return;
+                    if (column.getName().equals("upload_es_status")) {
+                        System.out.println("get upload_es_status");
+                        if (Objects.nonNull(column.getValue()) && Integer.parseInt(column.getValue()) == 0) {
+                            rowStr.append(id+",");
+                        }
                     }
-                    list.add(rowStr.deleteCharAt(rowStr.length() - 1).toString());
-                    System.out.println("rowStr=" + rowStr);
                 });
-            }else {
-                System.out.println("what?????????");
-                return;
-            }
-
+                if (StringUtils.isBlank(rowStr) || StringUtils.isBlank(rowStr.toString().replaceAll(",", ""))) {
+                    System.out.println("rowStr is null!");
+                    return;
+                }
+                list.add(rowStr.deleteCharAt(rowStr.length() - 1).toString());
+                System.out.println("rowStr=" + rowStr);
+            });
         });
         if (CollectionUtils.isEmpty(list)) {
             System.out.println("list is null,can not send!");
@@ -276,7 +261,7 @@ class CanalKafkaProducer {
         producer.send(record);
     }
 
-    private String syncCrm(){
+    private String syncCrm() {
         return "";
     }
 }

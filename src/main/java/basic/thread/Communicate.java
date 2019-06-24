@@ -72,10 +72,10 @@ public class Communicate {
         LinkedList linkedList = new LinkedList();
         ExecutorService service = Executors.newFixedThreadPool(15);
         for (int i = 0; i < 5; i++) {
-            service.submit(new ThreadSignal(linkedList, 5, Constants.REENTRANT_LOCK));
+            service.submit(new ThreadSignal(linkedList, 5, Constants.Reent_Lock));
         }
         for (int i = 0; i < 5; i++) {
-            service.submit(new ThreadAwait(linkedList, Constants.REENTRANT_LOCK));
+            service.submit(new ThreadAwait(linkedList, Constants.Reent_Lock));
         }
 
     }

@@ -11,7 +11,7 @@ import static utils.Constants.*;
 public class NLP {
     public static void main(String[] args) {
         // 初始化一个AipNlp
-        AipNlp client = new AipNlp(APP_ID, API_KEY, SECRET_KEY);
+        AipNlp client = new AipNlp(Baidu_APP_ID, Baidu_API_KEY, Baidu_SECRET_KEY);
 
         // 可选：设置网络连接参数
         client.setConnectionTimeoutInMillis(2000);
