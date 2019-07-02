@@ -3,8 +3,6 @@ package basic.thread;
 import java.io.IOException;
 import java.util.concurrent.locks.ReentrantLock;
 
-import static utils.Constants.LOCK;
-
 public class MyLock {
     public static void main(String[] args) {
         syncBlock();
@@ -17,7 +15,7 @@ public class MyLock {
 
     public static void syncBlock(){
         //加锁，拥有LOCK的Monitor
-        synchronized (LOCK){
+        synchronized (MyLock.class){
             System.out.println("enter syn block!");
             try {
                 Thread.sleep(60000);

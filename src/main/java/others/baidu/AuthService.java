@@ -1,4 +1,4 @@
-package baidu;
+package others.baidu;
 
 import org.json.JSONObject;
 
@@ -9,8 +9,8 @@ import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
-import static utils.Constants.Baidu_API_KEY;
-import static utils.Constants.Baidu_SECRET_KEY;
+import static config.PropertyConfig.Baidu_API_KEY;
+import static config.PropertyConfig.Baidu_SECRET_KEY;
 
 /**
  * 获取token类

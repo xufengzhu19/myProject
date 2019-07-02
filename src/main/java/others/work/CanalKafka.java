@@ -1,8 +1,7 @@
-package bdata;
+package others.work;
 
 import com.alibaba.otter.canal.client.CanalConnector;
 import com.alibaba.otter.canal.client.CanalConnectors;
-import com.alibaba.otter.canal.protocol.CanalEntry;
 import com.alibaba.otter.canal.protocol.CanalEntry.*;
 import com.alibaba.otter.canal.protocol.Message;
 import com.google.protobuf.InvalidProtocolBufferException;
@@ -13,14 +12,16 @@ import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import utils.Constants;
 import utils.JsonHelper;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Properties;
 
-import static utils.Constants.*;
+import static config.PropertyConfig.*;
 
 
 public class CanalKafka {
@@ -36,13 +37,13 @@ public class CanalKafka {
 
     private static void canalTest() {
         // 创建链接
-        CanalConnector connector = CanalConnectors.newSingleConnector(new InetSocketAddress(Constants.Canal_Host, Constants.Canal_Port),
-                Canal_Destination, Canal_User, Canal_Pwd);
+        CanalConnector connector = CanalConnectors.newSingleConnector(new InetSocketAddress(Canal_Host,
+                        Integer.parseInt(Canal_Port)),Canal_Destination, Canal_User, Canal_Pwd);
         int batchSize = 1000;
         int emptyCount = 0;
         try {
             connector.connect();
-            connector.subscribe(".*\\..*");
+            connector.subscribe(Canal_DB);
 
             connector.rollback();
             int totalEmtryCount = 1200;
@@ -126,7 +127,8 @@ class SimpleCanalClient {
 
     public SimpleCanalClient() {
         // 创建链接
-        connector = CanalConnectors.newSingleConnector(new InetSocketAddress(Canal_Host, Canal_Port), Canal_Destination, Canal_User, Canal_Pwd);
+        connector = CanalConnectors.newSingleConnector(new InetSocketAddress(Canal_Host, Integer.parseInt(Canal_Port)),
+                Canal_Destination, Canal_User, Canal_Pwd);
     }
 
     public List<Entry> execute(int batchSize) throws InstantiationException, IllegalAccessException, NoSuchMethodException, SecurityException {
@@ -137,9 +139,7 @@ class SimpleCanalClient {
 //        Method method = clazz.getMethod("send", Message.class);
         try {
             connector.connect();
-//            connector.subscribe(".*\\..*");
-//            connector.subscribe("canal_tsdb\\.sync_crm_cc_call_log");
-            connector.subscribe("canal_tsdb\\.voice_call_info");
+            connector.subscribe(Canal_DB);
 
             connector.rollback();
             int totalEmptyCount = 1200;
@@ -215,9 +215,9 @@ class CanalKafkaProducer {
                     || entry.getEntryType() == EntryType.TRANSACTIONEND) {
                 return;
             }
-            CanalEntry.RowChange rowChage = null;
+            RowChange rowChage = null;
             try {
-                rowChage = CanalEntry.RowChange.parseFrom(entry.getStoreValue());
+                rowChage = RowChange.parseFrom(entry.getStoreValue());
             } catch (InvalidProtocolBufferException e) {
                 e.printStackTrace();
             }
@@ -241,7 +241,7 @@ class CanalKafkaProducer {
                     if (column.getName().equals("upload_es_status")) {
                         System.out.println("get upload_es_status");
                         if (Objects.nonNull(column.getValue()) && Integer.parseInt(column.getValue()) == 0) {
-                            rowStr.append(id+",");
+                            rowStr.append(id + ",");
                         }
                     }
                 });

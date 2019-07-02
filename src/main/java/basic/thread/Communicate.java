@@ -1,6 +1,6 @@
 package basic.thread;
 
-import utils.Constants;
+import config.PropertyConfig;
 
 import java.util.LinkedList;
 import java.util.concurrent.ExecutorService;
@@ -72,10 +72,10 @@ public class Communicate {
         LinkedList linkedList = new LinkedList();
         ExecutorService service = Executors.newFixedThreadPool(15);
         for (int i = 0; i < 5; i++) {
-            service.submit(new ThreadSignal(linkedList, 5, Constants.Reent_Lock));
+            service.submit(new ThreadSignal(linkedList, 5, PropertyConfig.Reent_Lock));
         }
         for (int i = 0; i < 5; i++) {
-            service.submit(new ThreadAwait(linkedList, Constants.Reent_Lock));
+            service.submit(new ThreadAwait(linkedList, PropertyConfig.Reent_Lock));
         }
 
     }
@@ -86,10 +86,10 @@ public class Communicate {
     public static void bq(){
         ExecutorService service = Executors.newFixedThreadPool(15);
         for (int i = 0; i < 5; i++) {
-            service.submit(new ThreadBQP(Constants.BQueue));
+            service.submit(new ThreadBQP(PropertyConfig.BQueue));
         }
         for (int i = 0; i < 10; i++) {
-            service.submit(new ThreadBQC(Constants.BQueue));
+            service.submit(new ThreadBQC(PropertyConfig.BQueue));
         }
     }
 }

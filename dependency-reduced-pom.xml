@@ -11,9 +11,6 @@
         <version>2.3.1</version>
         <configuration>
           <outputDirectory>${basedir}/target/jar</outputDirectory>
-          <excludes>
-            <exclude>config/**</exclude>
-          </excludes>
         </configuration>
       </plugin>
       <plugin>
@@ -63,7 +60,7 @@
         <configuration>
           <archive>
             <manifest>
-              <mainClass>FlinkKafka</mainClass>
+              <mainClass>${main}</mainClass>
             </manifest>
           </archive>
           <descriptorRefs>
@@ -83,7 +80,7 @@
             <configuration>
               <transformers>
                 <transformer>
-                  <mainClass>bdata.FlinkKafka</mainClass>
+                  <mainClass>${main}</mainClass>
                 </transformer>
                 <transformer>
                   <resource>reference.conf</resource>
@@ -103,6 +100,7 @@
     </repository>
   </distributionManagement>
   <properties>
+    <main>others.bdata.HfqKafkaConsumer</main>
     <java.version>1.8</java.version>
   </properties>
 </project>

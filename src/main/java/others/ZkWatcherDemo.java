@@ -3,7 +3,7 @@ package others;
 import org.apache.log4j.Logger;
 import org.apache.zookeeper.*;
 import org.apache.zookeeper.data.Stat;
-import utils.Constants;
+import config.PropertyConfig;
 
 import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
@@ -73,7 +73,7 @@ public class ZkWatcherDemo implements Watcher {
      */
     public ZooKeeper createConntection() throws InterruptedException {
         try {
-            zk = new ZooKeeper(Constants.ZK_URL, time_out, this);
+            zk = new ZooKeeper(PropertyConfig.ZK_URL, time_out, this);
             //阻塞当前线程,当创好连接以后再继续执行当前线程
             countDownLatch.await();
         } catch (IOException e) {

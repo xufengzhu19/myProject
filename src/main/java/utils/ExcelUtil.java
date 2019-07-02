@@ -4,10 +4,12 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.time.FastDateFormat;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.ss.usermodel.DateUtil;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
@@ -29,19 +31,33 @@ public class ExcelUtil {
 
     private static final FastDateFormat FAST_DATE_FORMAT = FastDateFormat.getInstance("yyyy/MM/dd");
 
-    private static final DecimalFormat DECIMAL_FORMAT_NUMBER  = new DecimalFormat("0.00E000"); //格式化科学计数器
+    private static final DecimalFormat DECIMAL_FORMAT_NUMBER = new DecimalFormat("0.00E000"); //格式化科学计数器
 
     private static final Pattern POINTS_PATTERN = Pattern.compile("0.0+_*[^/s]+"); //小数匹配
 
+    public static HashMap<String, List<Object>> readExcelColumns(String path) throws IOException {
+        File f = new File(path);
+        FileInputStream file = new FileInputStream(f);
+        MultipartFile multipartFile = new MockMultipartFile("file", f.getName(), "text/plain", org.apache.poi.util.IOUtils.toByteArray(file));
+
+        String extension = multipartFile.getOriginalFilename().substring(multipartFile.getOriginalFilename().lastIndexOf(".") + 1).toLowerCase();
+        if (Objects.equals("xls", extension) || Objects.equals("xlsx", extension)) {
+            return readExcelColumns(multipartFile.getInputStream());
+        } else {
+            throw new IOException("不支持的文件类型");
+        }
+    }
+
     /**
      * 对外提供读取excel 的方法
+     *
      * @param file
      * @return
      * @throws IOException
      */
     public static List<List<Object>> readExcel(MultipartFile file) throws IOException {
         String extension = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".") + 1).toLowerCase();
-        if(Objects.equals("xls", extension) || Objects.equals("xlsx", extension)) {
+        if (Objects.equals("xls", extension) || Objects.equals("xlsx", extension)) {
             return readExcel(file.getInputStream());
         } else {
             throw new IOException("不支持的文件类型");
@@ -50,7 +66,7 @@ public class ExcelUtil {
 
     public static List<List<Object>> readExcelBycolumn(MultipartFile file, Integer columnNum) throws IOException {
         String extension = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".") + 1).toLowerCase();
-        if(Objects.equals("xls", extension) || Objects.equals("xlsx", extension)) {
+        if (Objects.equals("xls", extension) || Objects.equals("xlsx", extension)) {
             return readExcelBycolumn(file.getInputStream(), columnNum);
         } else {
             throw new IOException("不支持的文件类型");
@@ -59,6 +75,7 @@ public class ExcelUtil {
 
     /**
      * 对外提供读取excel 的方法
+     *
      * @param file
      * @param cls
      * @return
@@ -66,7 +83,7 @@ public class ExcelUtil {
      */
     public static <T> List<T> readExcel(MultipartFile file, Class<T> cls) throws IOException {
         String extension = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".") + 1).toLowerCase();
-        if(Objects.equals("xls", extension) || Objects.equals("xlsx", extension)) {
+        if (Objects.equals("xls", extension) || Objects.equals("xlsx", extension)) {
             return readExcel(file.getInputStream(), cls);
         } else {
             throw new IOException("不支持的文件类型");
@@ -144,7 +161,7 @@ public class ExcelUtil {
                     for (int j = 0; j < columnNum; j++) {
                         cell = row.getCell(j);
                         if (StringUtils.isEmpty(cell)) {
-                            linked.add("");
+                            linked.add(null);
                             continue;
                         }
                         value = getCellValue(cell);
@@ -162,6 +179,61 @@ public class ExcelUtil {
         return list;
     }
 
+    private static HashMap<String, List<Object>> readExcelColumns(InputStream inputStream) throws IOException {
+        HashMap<String, List<Object>> map = new HashMap<>();
+        HashMap<Integer, String> mapTitle = new HashMap<>();
+        List<List<Object>> list = new LinkedList<>();
+        Workbook workbook = null;
+        try {
+            workbook = WorkbookFactory.create(inputStream);
+            int sheetsNumber = workbook.getNumberOfSheets();
+            for (int n = 0; n < sheetsNumber; n++) {
+                Sheet sheet = workbook.getSheetAt(n);
+                Object value = null;
+                Row row = null;
+                Cell cell = null;
+                for (int i = sheet.getFirstRowNum(); i <= sheet.getPhysicalNumberOfRows(); i++) { // 读取标题
+                    row = sheet.getRow(i);
+                    if (StringUtils.isEmpty(row)) {
+                        continue;
+                    }
+                    if (i == sheet.getFirstRowNum()) {
+                        for (int j = row.getFirstCellNum(); j <= row.getLastCellNum(); j++) {
+                            cell = row.getCell(j);
+                            if (StringUtils.isEmpty(cell)) {
+                                map.put("", new LinkedList<>());
+                                mapTitle.put(j,"");
+                                continue;
+                            }
+                            value = getCellValue(cell);
+                            map.put(value.toString(), new LinkedList<>());
+                            mapTitle.put(j,value.toString());
+                        }
+                        continue;
+                    }
+                    row = sheet.getRow(i);
+                    if (StringUtils.isEmpty(row)) {
+                        continue;
+                    }
+                    for (int j = row.getFirstCellNum(); j <= row.getLastCellNum(); j++) {
+                        cell = row.getCell(j);
+                        if (StringUtils.isEmpty(cell)) {
+//                            map.get(mapTitle.get(j)).add(null);
+                            continue;
+                        }
+                        value = getCellValue(cell);
+                        map.get(mapTitle.get(j)).add(value);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            IOUtils.closeQuietly(workbook);
+            IOUtils.closeQuietly(inputStream);
+        }
+        return map;
+    }
 
 
     /**
@@ -246,22 +318,22 @@ public class ExcelUtil {
                 value = cell.getStringCellValue();
                 break;
             case NUMERIC:
-                if(org.apache.poi.ss.usermodel.DateUtil.isCellDateFormatted(cell)){ //日期
+                if (org.apache.poi.ss.usermodel.DateUtil.isCellDateFormatted(cell)) { //日期
                     value = FAST_DATE_FORMAT.format(DateUtil.getJavaDate(cell.getNumericCellValue()));//统一转成 yyyy/MM/dd
-                } else if("@".equals(cell.getCellStyle().getDataFormatString())
+                } else if ("@".equals(cell.getCellStyle().getDataFormatString())
                         || "General".equals(cell.getCellStyle().getDataFormatString())
-                        || "0_ ".equals(cell.getCellStyle().getDataFormatString())){
+                        || "0_ ".equals(cell.getCellStyle().getDataFormatString())) {
                     //文本  or 常规 or 整型数值
                     value = DECIMAL_FORMAT.format(cell.getNumericCellValue());
-                } else if(POINTS_PATTERN.matcher(cell.getCellStyle().getDataFormatString()).matches()){ //正则匹配小数类型
+                } else if (POINTS_PATTERN.matcher(cell.getCellStyle().getDataFormatString()).matches()) { //正则匹配小数类型
                     value = cell.getNumericCellValue();  //直接显示
-                } else if("0.00E+00".equals(cell.getCellStyle().getDataFormatString())){//科学计数
-                    value = cell.getNumericCellValue();	//待完善
+                } else if ("0.00E+00".equals(cell.getCellStyle().getDataFormatString())) {//科学计数
+                    value = cell.getNumericCellValue();    //待完善
                     value = DECIMAL_FORMAT_NUMBER.format(value);
-                } else if("0.00%".equals(cell.getCellStyle().getDataFormatString())){//百分比
+                } else if ("0.00%".equals(cell.getCellStyle().getDataFormatString())) {//百分比
                     value = cell.getNumericCellValue(); //待完善
                     value = DECIMAL_FORMAT_PERCENT.format(value);
-                } else if("# ?/?".equals(cell.getCellStyle().getDataFormatString())){//分数
+                } else if ("# ?/?".equals(cell.getCellStyle().getDataFormatString())) {//分数
                     value = cell.getNumericCellValue(); ////待完善
                 } else { //货币
                     value = cell.getNumericCellValue();
@@ -282,16 +354,17 @@ public class ExcelUtil {
 
     /**
      * 导出Excel
+     *
      * @param sheetName sheet名称
-     * @param title 标题
-     * @param values 内容
-     * @param wb HSSFWorkbook对象
+     * @param title     标题
+     * @param values    内容
+     * @param wb        HSSFWorkbook对象
      * @return
      */
-    public static HSSFWorkbook getHSSFWorkbook(String sheetName, String []title, String [][]values, HSSFWorkbook wb){
+    public static HSSFWorkbook getHSSFWorkbook(String sheetName, String[] title, String[][] values, HSSFWorkbook wb) {
 
         // 第一步，创建一个HSSFWorkbook，对应一个Excel文件
-        if(wb == null){
+        if (wb == null) {
             wb = new HSSFWorkbook();
         }
         // 第二步，在workbook中添加一个sheet,对应Excel文件中的sheet
@@ -308,16 +381,16 @@ public class ExcelUtil {
         HSSFCell cell = null;
 
         //创建标题
-        for(int i=0;i<title.length;i++){
+        for (int i = 0; i < title.length; i++) {
             cell = row.createCell(i);
             cell.setCellValue(title[i]);
             cell.setCellStyle(style);
         }
 
         //创建内容
-        for(int i=0;i<values.length;i++){
+        for (int i = 0; i < values.length; i++) {
             row = sheet.createRow(i + 1);
-            for(int j=0;j<values[i].length;j++){
+            for (int j = 0; j < values[i].length; j++) {
                 //将内容按顺序赋给对应的列对象
                 row.createCell(j).setCellValue(values[i][j]);
             }

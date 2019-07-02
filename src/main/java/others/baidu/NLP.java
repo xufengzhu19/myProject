@@ -1,11 +1,11 @@
-package baidu;
+package others.baidu;
 
 import com.baidu.aip.nlp.AipNlp;
 import org.json.JSONObject;
 
 import java.util.HashMap;
 
-import static utils.Constants.*;
+import static config.PropertyConfig.*;
 
 
 public class NLP {
@@ -39,7 +39,7 @@ public class NLP {
 //        JSONObject res = client.wordSimEmbedding(word1, word2, options);
 
         //短文本相似度
-        options.put("model", "CNN");
+        options.put("models", "CNN");
         String text1 = "万达普惠借钱靠谱吗";
         String text2 = "万达普惠合法吗?";
         JSONObject res = client.simnet(text1, text2, options);

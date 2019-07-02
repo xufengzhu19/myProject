@@ -1,21 +1,13 @@
-package others;
+package utils;
 
-import utils.Constants;
+import config.PropertyConfig;
 
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
 import java.util.Properties;
 
-import javax.mail.Folder;
-import javax.mail.Message;
-import javax.mail.Session;
-import javax.mail.Store;
-
-import javax.mail.internet.InternetAddress;
-
-import static utils.Constants.*;
-
-public class MailDemo {
-    public static void main(String[] args) throws Exception {
-
+public class MailUtils {
+    public static void receiveMail() throws Exception {
         Properties props = new Properties();
 
 //        props.put("mail.transport.protocol", "smtp");//指定邮件发送协议  只接受邮件是可以不要写的
@@ -36,7 +28,7 @@ public class MailDemo {
 
 //        store.connect("pop.163.com", "***@163.com", "*********");
         //            (邮箱的服务器地址)   账号  密码
-        store.connect(Constants.Mail_User, Constants.Mail_Pass);
+        store.connect(PropertyConfig.Mail_User, PropertyConfig.Mail_Pass);
         //imap
 //        store.connect( Mail_QQ_User, Mail_QQ_Pass_Imap);
         //pop3
@@ -87,7 +79,5 @@ public class MailDemo {
             System.out.println("========================================\r\n");
         }
 
-
     }
 }
-

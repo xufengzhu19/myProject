@@ -1,4 +1,4 @@
-package bdata;
+package others.work;
 
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.common.serialization.SimpleStringSchema;
@@ -13,7 +13,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Properties;
 
-import static utils.Constants.*;
+import static config.PropertyConfig.*;
 
 public class FlinkKafka {
     public static void main(String[] args) throws Exception {

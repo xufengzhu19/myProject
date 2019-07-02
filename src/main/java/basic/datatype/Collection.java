@@ -1,7 +1,5 @@
 package basic.datatype;
 
-import entity.Student;
-
 import java.util.*;
 
 public class Collection {

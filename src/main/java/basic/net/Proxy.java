@@ -37,7 +37,7 @@ public class Proxy {
         String s = convertStreamToString(in);
         System.out.println(s);
         // System.out.println(s);
-        if (s.indexOf("baidu") > 0) {//有效IP
+        if (s.indexOf("others/baidu") > 0) {//有效IP
             System.out.println(ip + ":" + port + " is ok");
         }
     }

@@ -1,7 +1,5 @@
 package utils;
 
-import org.apache.commons.logging.Log;
-
 import java.io.UnsupportedEncodingException;
 
 public class QuotedPrintable {
